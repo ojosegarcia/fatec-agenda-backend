@@ -48,7 +48,7 @@ public class ContatoService {
             aux.setPhone(contato.getPhone());
             this.contatoRepository.save(aux);
 
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
               throw new EntityNotFoundException("Contato não cadastrado");  
         }
     }
