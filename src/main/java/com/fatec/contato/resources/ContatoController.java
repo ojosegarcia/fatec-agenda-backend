@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fatec.contato.dto.ContatoRequest;
+import com.fatec.contato.dto.ContatoResponse;
 import com.fatec.contato.entities.Contato;
 import com.fatec.contato.services.ContatoService;
 
@@ -30,13 +32,13 @@ public class ContatoController {
     private ContatoService contatoService;
 
     @GetMapping
-    public ResponseEntity<List<Contato>> getContatos() {
+    public ResponseEntity<List<ContatoResponse>> getContatos() {
     return ResponseEntity.ok(contatoService.getContatos());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Contato> getContatoById(@PathVariable int id){
-        return ResponseEntity.ok(contatoService.getContatoByContato(id));
+    public ResponseEntity<ContatoResponse> getContatoById(@PathVariable int id){
+        return ResponseEntity.ok(contatoService.getContatoById(id));
     }
 
     @DeleteMapping("{id}")
@@ -46,19 +48,19 @@ public class ContatoController {
     }
 
     @PostMapping
-    public ResponseEntity<Contato> save(@RequestBody Contato contato){
-        Contato newContato = this.contatoService.save(contato);
+    public ResponseEntity<ContatoResponse> save(@RequestBody ContatoRequest contato){
+        ContatoResponse newContato = this.contatoService.save(contato);
 
-        URI location = ServletUriComponentsBuilder.
-        fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder 
+        .fromCurrentRequest()
         .path("/{id}")
-        .buildAndExpand(newContato.getId())
+        .buildAndExpand(newContato.id())
         .toUri();
         return ResponseEntity.created(location).body(newContato);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody Contato contato){
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody ContatoRequest contato){
         this.contatoService.update(id, contato);
         return ResponseEntity.ok().build();
     }
